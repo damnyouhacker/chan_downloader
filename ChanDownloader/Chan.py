@@ -43,6 +43,20 @@ class ChanDownloader:
             except:
                 pass
 
+    def verifiesPath(self):
+        """
+        Verifes the path for the download function.
+        """
+        path = input('Please enter your desired path: ')
+        normPath = os.path.normpath(path + f'/{self.JSON["posts"][0]["semantic_url"]}')
+
+        if os.path.exists(normPath):
+            print('Folder already exisit!')
+        else:
+            os.mkdir(normPath)
+            print('Folder was created!')
+        return normPath
+
     def download(self):
         """
         Checks the the filepath and if folders have to created, normalizes then the path.
@@ -50,19 +64,8 @@ class ChanDownloader:
 
         :return: Void
         """
-        # self.getLinksFromJSON()
-
-        filePath = input('Please type in the filepath. A new folder will there be created.')
-
         counter = 0
-
-        normPath = os.path.normpath(filePath + f'/{self.JSON["posts"][0]["semantic_url"]}')
-
-        if os.path.exists(normPath):
-            print('Folder already exisit!')
-        else:
-            os.mkdir(normPath)
-            print('Folder was created!')
+        normPath = self.verifiesPath()
 
         print('Starting Download!')
 
@@ -87,7 +90,7 @@ class ChanDownloader:
 
     def verifiesLink(self):
         """
-        Verifies the Links which is given by the constructor of the class.
+        Verifies the links which is given by the constructor of the class.
         """
         regex = r'boards\.4chan\.org\/(\w*)\/thread\/(\d*)'
         matches = re.search(regex, self.uri)
