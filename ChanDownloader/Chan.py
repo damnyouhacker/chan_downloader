@@ -73,14 +73,15 @@ class ChanDownloader:
             r = None
             total_size = 0
 
-            print('Connecting:')
             try:
                 r = requests.get(content[0], timeout=6.0, stream=True)
                 total_size = int(r.headers.get('content-length', 0))
             except (ConnectionRefusedError, TimeoutError, ConnectionError, ConnectionAbortedError) as error:
                 print(error)
 
-            if r:
+            if os.path.isfile(f'{normPath}/{content[2]}{content[3]}'):
+                print('File was already downloaded!')
+            elif r:
                 with open(os.path.normcase(f'{normPath}/{content[2]}{content[3]}'), 'wb') as handle:
                     for data in tqdm(r.iter_content(), total=math.ceil(total_size), ascii=True,
                                      desc=f'Download: {counter} of {len(self.urls)}', unit='KB', unit_scale=True):
